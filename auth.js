@@ -23,9 +23,12 @@ async function redirectIfSignedIn() {
   try {
     if (typeof supabaseClient === "undefined" || !supabaseClient?.auth) return;
 
-    const { data } = await supabaseClient.auth.getSession();
+    // getUser() asks the server to validate the login, the same check the
+    // dashboard uses, so an expired login can't bounce a user back and forth
+    // between the dashboard and these pages.
+    const { data, error } = await supabaseClient.auth.getUser();
 
-    if (data?.session) {
+    if (!error && data?.user) {
       window.location.replace("dashboard.html");
     }
   } catch (error) {
@@ -183,7 +186,7 @@ async function handlePasswordReset(event) {
     const client = getSupabaseClient();
 
     const { error } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: pageUrl("signin.html")
+      redirectTo: pageUrl("reset-password.html")
     });
 
     if (error) throw error;
@@ -200,4 +203,4 @@ async function handlePasswordReset(event) {
       "error"
     );
   }
-}
+}
