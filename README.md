@@ -1,5 +1,3 @@
-# SpendWise
-A Website for Tracking income and expenses
 # SpendWise: Personal Expense Tracker & Budget Visualizer
 
 Log income and expenses, see your balance at a glance, track spending by category, set monthly budgets and savings goals.
